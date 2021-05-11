@@ -14,7 +14,8 @@ router.get("",async(req,res,next)=>{
   const totalRows =await qnaService.getCount(qa_category,keyword);
   const pager = paging.init(5,5, pageNo,totalRows);
   const qnas = await qnaService.list(pager,qa_category,keyword);
-  res.json({qnas,pager});
+  console.log("---"+totalRows);
+  res.json({qnas,pager,count:totalRows});
 }catch(error){
   console.log(error);
   next(error);
