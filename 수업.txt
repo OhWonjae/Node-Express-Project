@@ -1,0 +1,19 @@
+Nunjucks 표현식
+
+데이터 바인딩 
+{{ board.bcontent }}
+
+if문
+
+{ % if 조건식 % }
+{ % elif 조건식 % }
+{ % else % }
+{ % endif % }
+
+for문
+{% for item in items %} ... {% else %} ... {% endfor %}
+
+{% else %}는 items가 비어 있을 경우 적용
+
+내부에 사용 가능한 변수 
+
