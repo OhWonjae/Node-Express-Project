@@ -24,8 +24,7 @@ router.get("",async(req,res,next)=>{
 });
 
 router.get("/:review_id",async(req,res,next)=>{
-  try{
-    
+  try{    
   const review_id = req.params.review_id;
   const review = await reviewService.getReview(review_id);
   res.json(review);

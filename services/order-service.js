@@ -1,34 +1,26 @@
 const db = require("../sequelize/models");
 const Op = db.Sequelize.Op;
 module.exports = {
-  getCount: async function(qa_category,keyword){
+  getCount: async function(keyword,searchStatus){
     try{
       let where = null;
-      if(qa_category==="전체" && keyword!=null){   
+      if(searchStatus==null && keyword!=null){   
         where={
-            "user_id":{[Op.like]:"%" + keyword + "%"}
+            "order_name":{[Op.like]:"%" + keyword + "%"}
           }
         }
-        else if((qa_category==="상품 문의" || qa_category==="배송 문의"|| qa_category==="주문/결제 문의" ) && keyword==null){
-          where={
-             "qa_category":qa_category
+      else if(searchStatus!=null && keyword==null){   
+        where={
+            "delivery_status":searchStatus
           }
-        }else if((qa_category==="답변 대기" || qa_category==="답변 완료" ) && keyword==null){
-          where={
-             "qa_status":qa_category
+        }
+      else if(searchStatus!=null && keyword==null){   
+        where={
+              "order_name":{[Op.like]:"%" + keyword + "%"},
+              "delivery_status":searchStatus
           }
-        }else if((qa_category==="배송 문의" || qa_category==="주문/결제 문의" || qa_category==="상품 문의" ) && keyword!=null){
-            where={
-              "user_id":{[Op.like]:"%" + keyword + "%"},
-              "qa_category":qa_category
-            }
-        }else if((qa_category==="답변 대기" || qa_category==="답변 완료" ) && keyword!=null){
-          where={
-            "user_id":{[Op.like]:"%" + keyword + "%"},
-            "qa_status":qa_category
-          }
-      }
-      const count = await db.Qna.count({
+        }
+      const count = await db.Order.count({
         where
       });
       return count;
@@ -37,68 +29,61 @@ module.exports = {
     }
   },
  
-  list: async function(pager,qa_category,keyword){
+  list: async function(pager,keyword,searchStatus){
     try{
       let where = null;
-      console.log(qa_category);
-      console.log(keyword);
-      if(qa_category==="전체" && keyword!=null){   
+      if(searchStatus==null && keyword!=null){   
         where={
-            "user_id":{[Op.like]:"%" + keyword + "%"}
+            "order_name":{[Op.like]:"%" + keyword + "%"}
           }
         }
-        else if((qa_category==="상품 문의" || qa_category==="배송 문의"|| qa_category==="주문/결제 문의" ) && keyword==null){
-          where={
-             "qa_category":qa_category
+      else if(searchStatus!=null && keyword==null){   
+        where={
+            "delivery_status":searchStatus
           }
-        }else if((qa_category==="답변 대기" || qa_category==="답변 완료" ) && keyword==null){
-          where={
-             "qa_status":qa_category
+        }
+      else if(searchStatus!=null && keyword!=null){   
+        where={
+              "order_name":{[Op.like]:"%" + keyword + "%"},
+              "delivery_status":searchStatus
           }
-        }else if((qa_category==="배송 문의" || qa_category==="주문/결제 문의" || qa_category==="상품 문의" ) && keyword!=null){
-            where={
-              "user_id":{[Op.like]:"%" + keyword + "%"},
-              "qa_category":qa_category
-            }
-        }else if((qa_category==="답변 대기" || qa_category==="답변 완료" ) && keyword!=null){
-          where={
-            "user_id":{[Op.like]:"%" + keyword + "%"},
-            "qa_status":qa_category
-          }
-      }
-      const qnas = await db.Qna.findAll({
+        }
+      const orders = await db.Order.findAll({
         where,
-        order:[["qa_id","DESC"]], 
+        order:[["order_date","DESC"]], 
         limit:pager.rowsPerPage,    
         offset:pager.startRowIndex
       });
-      return qnas;
+      return orders;
     }catch(error){
       throw error;
     }
   },
-  getQna: async function(qa_id){
+  getOrder: async function(order_id){
     try{
-      const qna = await db.Qna.findOne({
-          where:{qa_id}
+      const order = await db.Order.findOne({
+          where:{order_id},
+          include:[{
+            model:db.Order_Product,
+            include:[{
+              model:db.Product,
+              include:[{
+                model:db.Photo,
+              }]
+            }]
+          }]
       });
-      return qna;
+      return order;
   }catch(error){
       throw error;
   }
   },
-  update: async function(qna){
+  update: async function(order){
     try{
-        const row = await db.Qna.update({
-            qa_category:qna.qa_category,
-            qa_content:qna.qa_content,
-            qa_status:qna.qa_status,
-            qa_cn:qna.qa_cn,
-            user_id:qna.user_id,
-            qa_answer:qna.qa_answer,
-            qa_admin:qna.qa_admin,
+        const row = await db.Order.update({
+            delivery_status:order.delivery_status
         },{
-            where:{qa_id:qna.qa_id}
+            where:{order_id:order.order_id}
         });
         return row;
     }catch(error){

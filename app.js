@@ -17,6 +17,9 @@ console.log(0/5);
 const authController = require("./routes/AuthController");
 const reviewController = require("./routes/ReviewController");
 const qnaController = require("./routes/QnaController");
+const orderController = require("./routes/OrderController");
+const resourceController = require("./routes/ResourceController");
+const productController = require("./routes/ProductController");
 //.env 파일을 읽어서 process.env에 추가
 dotenv.config();
 
@@ -95,7 +98,7 @@ app.use((req, res, next) => {
 //요청 http 본문에 있는(POST 방식) 데이터를 파싱해서
 //req.body 객체로 만드는 미들웨어
 //content type을 보고 파싱함
-app.use(express.urlencoded({extended:true})); //x-www-form-urlencoded: param1=value1&param2=value2
+app.use(express.urlencoded({extended:false})); //x-www-form-urlencoded: param1=value1&param2=value2
 app.use(express.json()); //raw/json: {"param1":"value1", "param2":"value2"}
 
 //요청 HTTP 헤더에 있는 쿠키를 파싱해서 
@@ -134,7 +137,9 @@ app.use((req, res, next) => {
 app.use("/auth", authController);
 app.use("/reviews", reviewController);
 app.use("/qna", qnaController);
-
+app.use("/orders", orderController);
+app.use("/resource", resourceController);
+app.use("/products", productController);
 //404처리 미들웨어
 //위에 맞는 경로가 없을때
 app.use((req, res, next) => {
