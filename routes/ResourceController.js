@@ -24,7 +24,7 @@ switch(photo_role){
     break;
    
 }
-  res.download(savePath,photo_sname);
+  res.download(savePath);
 }catch(error){
   console.log(error);
   next(error);

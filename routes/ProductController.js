@@ -55,7 +55,6 @@ router.post("",multipartFormData.fields([{name:"p_mainphoto"}, {name:"p_subphoto
     const product = req.body;
     const files = req.files;
     console.log(files);
-    product.p_id=0;
     product.p_salescount=0;
     product.p_rate=0;
     product.p_upload_date=new Date();
@@ -67,7 +66,7 @@ router.post("",multipartFormData.fields([{name:"p_mainphoto"}, {name:"p_subphoto
             await sizeService.create(size);
         }
     }
-   
+  
    if(files.p_mainphoto&&files.p_mainphoto.length>0){
     var type  = files.p_mainphoto[0].mimetype.split("/")[1];
     var photo = {photo_oname:files.p_mainphoto[0].originalname, photo_sname:files.p_mainphoto[0].filename
@@ -100,12 +99,12 @@ router.post("",multipartFormData.fields([{name:"p_mainphoto"}, {name:"p_subphoto
 
 
 
-  router.put("",multipartFormData.fields([{name:"photo_ids"},{name:"p_mainphoto"}, {name:"p_subphotos"},{name:"p_detailphoto"}]),async(req,res,next)=>{
+  router.put("",multipartFormData.fields([{name:"p_mainphoto"}, {name:"p_subphotos"},{name:"p_detailphoto"}]),async(req,res,next)=>{
     try{
     const product = req.body;
     const files = req.files;
+    console.log("----------------------");
     console.log(product);
-    console.log(files);
     const updateProduct = await productService.update(product);
     await sizeService.delete(product.p_id);
     for(var i=0; i< product.p_size.length; i++){

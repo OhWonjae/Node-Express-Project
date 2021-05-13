@@ -3,7 +3,9 @@ const Op = db.Sequelize.Op;
 module.exports = {
   getCount: async function(){
     try{
-      const count = await db.Product.count();
+      const count = await db.Product.count({
+        where:{"p_enabled":1}
+      });
       return count;
     }catch(error){
       throw error;
