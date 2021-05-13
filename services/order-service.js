@@ -59,6 +59,16 @@ module.exports = {
       throw error;
     }
   },
+  getReadyCount: async function(){
+    try{
+      const order = await db.Order.count({
+          where:{delivery_status:"배송준비중"},       
+      });
+      return order;
+  }catch(error){
+      throw error;
+  }
+  },
   getOrder: async function(order_id){
     try{
       const order = await db.Order.findOne({

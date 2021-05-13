@@ -36,7 +36,17 @@ module.exports = {
       throw error;
     }
   },
- 
+  getWaitRows: async function(){
+    try{
+       
+        const row = await db.Qna.count({
+            where:{qa_status:"답변 대기"}
+        });
+        return row;
+    }catch(error){
+        throw error;
+    }
+  },
   list: async function(pager,qa_category,keyword){
     try{
       let where = null;

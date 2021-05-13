@@ -38,6 +38,18 @@ router.get("/:p_id",async(req,res,next)=>{
 }
 });
 
+router.get("/CountSort/:sort",async(req,res,next)=>{
+  try{
+  const sort = req.params.sort;
+  const count = await productService.getCountSort(sort);
+  
+  res.json(count);
+}catch(error){
+  console.log(error);
+  next(error);
+}
+});
+
 router.post("",multipartFormData.fields([{name:"p_mainphoto"}, {name:"p_subphotos"},{name:"p_detailphoto"}]),async(req,res,next)=>{
     try{
     const product = req.body;

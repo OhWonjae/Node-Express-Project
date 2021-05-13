@@ -82,6 +82,28 @@ module.exports = {
         throw error;
     }
   },
+  getCountSort: async function(sort){
+    try{
+        let where=null;
+        if(sort==="전체"){
+          where={"p_enabled":1}
+        }
+        else if(sort==="재고부족"){
+          where={
+          [Op.and]:[
+            {"p_enabled":1},
+            {"p_stock":0}
+          ]
+        }
+        }
+        const row = await db.Product.count({
+            where
+        });
+        return row;
+    }catch(error){
+        throw error;
+    }
+  },
 
 
 }

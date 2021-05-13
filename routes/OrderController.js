@@ -21,7 +21,16 @@ router.get("",async(req,res,next)=>{
   next(error);
 }
 });
-
+router.get("/ordercount",async(req,res,next)=>{
+  try{
+  const count = await orderService.getReadyCount();
+  
+  res.json(count);
+}catch(error){
+  console.log(error);
+  next(error);
+}
+});
 router.get("/:order_id",async(req,res,next)=>{
   try{
     const order_id = req.params.order_id;

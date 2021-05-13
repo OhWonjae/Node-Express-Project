@@ -21,7 +21,15 @@ router.get("",async(req,res,next)=>{
   next(error);
 }
 });
-
+router.get("/readwait",async(req,res,next)=>{
+  try{
+  const count = await qnaService.getWaitRows();
+  res.json(count);
+}catch(error){
+  console.log(error);
+  next(error);
+}
+});
 router.get("/:qa_id",async(req,res,next)=>{
   try{
   const qa_id = req.params.qa_id;
